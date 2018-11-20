@@ -9,8 +9,8 @@
  */
  
  // VISIBILITY VARIABLES
- electronics_on = true;
- sprockets_on = true;
+ electronics_on = false;
+ sprockets_on = false;
  
  // BASE VARIABLES
  base_width = 160;
@@ -54,6 +54,10 @@
  
  //long threaded bolt is used as axle from body
 
+ module snobot_text() {
+     
+ }
+
  module m3_bolt(height=5) {
      cylinder(r=m3_radius,h=height,center=true,$fn=100);
  }
@@ -77,7 +81,8 @@
  
  module m3_base(height=100) {
     difference() {
-        base(rounded=true);
+        linear_extrude(5) // Thickness control for roof
+            base(rounded=true);
 
         side_base_m3_bolts(height);
 
@@ -207,6 +212,16 @@ module place_holder_sprockets() {
             sprocket(2);
 }
 
+module body_roof() {
+    difference() {
+        m3_base();
+        
+        translate([-29,0,4])
+            linear_extrude(2)
+                #text("SNOBOT");
+    }
+}
+
 module body_version_one() {
     linear_extrude(5)
         base(rounded=true);
@@ -229,12 +244,13 @@ module body_version_one() {
 // Needs above enclosure mounting points for motors
 // to form triangular tank track
 module body_version_two() {
+    additive_depth = 20;
     difference() {
-        linear_extrude(30)
+        linear_extrude(sprocket_brace_height+additive_depth)
             base(rounded=true);
         
         translate([0,0,-1])
-        linear_extrude(25)
+        linear_extrude(sprocket_brace_height+additive_depth-5)
         scale([0.94,0.94,1])
             base(rounded=false);
         
