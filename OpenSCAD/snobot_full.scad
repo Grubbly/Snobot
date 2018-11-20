@@ -8,6 +8,10 @@
  *  Snobot full component model
  */
  
+ // VISIBILITY VARIABLES
+ electronics_on = true;
+ sprockets_on = true;
+ 
  // BASE VARIABLES
  base_width = 160;
  base_length = 180;
@@ -31,17 +35,73 @@
  // RASPBERRY PI PROTOTYPE
  raspberry_pi_height = 17;
  
- // L298N 
+ // L298N PROTOTYPE
  L298N_height = 26;
  L298N_side_length = 43;
  
- // Bridge 
+ // BRIDGE 
+ // -------
  
- // Breadboard
+ // BREADBOARD PROTOTYPE
  breadboard_width = 55;
  breadboard_length = 85;
  
+ // M3 BOLTS
+ m3_radius = 1.5;
+ m3_diameter = 2*m3_radius;
+ m3_y_shift = base_width/2 + 2*rounded_corner_radius;
+ m3_side_shift = base_width/2;
+ 
  //long threaded bolt is used as axle from body
+
+ module m3_bolt(height=5) {
+     cylinder(r=m3_radius,h=height,center=true,$fn=100);
+ }
+ 
+ module side_base_m3_bolts(height) {
+    translate([m3_side_shift,0,0]) {
+        m3_bolt(height=height);
+    
+        translate([0,m3_y_shift,0])
+            m3_bolt(height=height);
+    
+        translate([0,-m3_y_shift,0])
+            m3_bolt(height=height);
+    }
+ }
+ 
+ module central_base_m3_bolts(height) {
+     translate([0,m3_y_shift,0])
+        m3_bolt(height=height);
+ }
+ 
+ module m3_base(height=100) {
+    difference() {
+        base(rounded=true);
+
+        side_base_m3_bolts(height);
+
+        mirror()
+            side_base_m3_bolts(height);
+        
+        central_base_m3_bolts(height);
+        
+        scale([1,-1,1])
+            central_base_m3_bolts(height);
+    }
+ }
+ 
+ module perimeter_m3_bolts() {
+    side_base_m3_bolts(height);
+
+    mirror()
+        side_base_m3_bolts(height);
+    
+    central_base_m3_bolts(height);
+        
+    scale([1,-1,1])
+        central_base_m3_bolts(height);
+ }
 
  module breadboard() {
      square([breadboard_width, breadboard_length]);
@@ -75,7 +135,7 @@ module sprocket(scale_factor=1) {
      if(rounded) {
         minkowski() {
             square([base_width, base_length], center=true);
-            circle(r=rounded_corner_radius);
+            circle(r=rounded_corner_radius,$fn=100);
         }
      } else {
         square([base_width, base_length], center=true);
@@ -157,29 +217,38 @@ module body_version_one() {
 
     linear_extrude(sprocket_brace_height)
         left_and_right_sprocket_braces();
-
-    place_holder_sprockets();
-    #electronic_components();
+    
+    if(electronics_on) {
+        #electronic_components();
+    }
+    if(sprockets_on) {
+        place_holder_sprockets();
+    }
 }
 
 // Needs above enclosure mounting points for motors
 // to form triangular tank track
 module body_version_two() {
     difference() {
-    linear_extrude(30)
-        base(rounded=true);
-    
-    translate([0,0,-1])
-    linear_extrude(25)
-    scale([0.94,0.94,1])
-        base(rounded=false);
+        linear_extrude(30)
+            base(rounded=true);
+        
+        translate([0,0,-1])
+        linear_extrude(25)
+        scale([0.94,0.94,1])
+            base(rounded=false);
+        
+        perimeter_m3_bolts(height=20);
     }
 
     translate([0,-10,0])
-    #electronic_components(no_motors=true);
+    
+    if(electronics_on) {
+        #electronic_components(no_motors=true);
+    }
+    if(sprockets_on) {
+        place_holder_sprockets();
+    }
 }
 
 body_version_two();
-
-
-
