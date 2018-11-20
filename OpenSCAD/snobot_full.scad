@@ -9,16 +9,29 @@
  */
  
  // BASE VARIABLES
- base_width = 130;
+ base_width = 160;
  base_length = 180;
- rounded_corner_radius = 7;
+ base_height = 5;
+ rounded_corner_radius = 5;
  
  // SPROCKET VARIABLES
  sprocket_width = 10;
- sprocket_brace_thickness = 10;
+ sprocket_brace_thickness = 5;
  sprocket_brace_distance_from_center = base_width/2 - 0.5*sprocket_brace_thickness;
+ sprocket_brace_height = 25 + base_height;
+ 
+ // MOTOR PROTOTYPE
+ motor_width = 32;
+ motor_height = 25 + base_height;
+ motor_length = 78.5;
+ motor_distance_from_center = sprocket_brace_distance_from_center-sprocket_brace_thickness-0.5*motor_width-0.5*rounded_corner_radius;
+ motor_y_shift = base_length/2 - motor_length/2 + rounded_corner_radius;
  
  //long threaded bolt is used as axle from body
+ 
+ module motor_case() {
+     square([motor_width,motor_length], center=true);
+ }
  
  module sprocket_base_import() {
      color("Lime", 1.0)
@@ -56,10 +69,24 @@ module left_and_right_sprocket_braces() {
     translate([-sprocket_brace_distance_from_center,0,0])
         #sprocket_brace();
 }
- 
-base(rounded=true);
 
-left_and_right_sprocket_braces();
+module left_and_right_motor_placeholders() {
+    translate([motor_distance_from_center,0,0])
+        motor_case();
+    translate([-motor_distance_from_center,0,0])
+        motor_case();
+}
+ 
+linear_extrude(5)
+    base(rounded=true);
+
+linear_extrude(sprocket_brace_height)
+    left_and_right_sprocket_braces();
+
+#linear_extrude(motor_height) {
+    translate([0,motor_y_shift,0])
+        left_and_right_motor_placeholders();
+}
 
 sprocket();
 
