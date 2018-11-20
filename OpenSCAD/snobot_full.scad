@@ -18,6 +18,7 @@
  sprocket_width = 10;
  sprocket_brace_thickness = 4;
  sprocket_brace_distance_from_center = base_width/2 - 0.5*sprocket_brace_thickness;
+ sprocket_distance_from_center = sprocket_brace_distance_from_center + 2*sprocket_width;
  sprocket_brace_height = 25 + base_height;
  
  // MOTOR PROTOTYPE
@@ -30,8 +31,25 @@
  // RASPBERRY PI PROTOTYPE
  raspberry_pi_height = 17;
  
+ // L298N 
+ L298N_height = 26;
+ L298N_side_length = 43;
+ 
+ // Bridge 
+ 
+ // Breadboard
+ breadboard_width = 55;
+ breadboard_length = 85;
  
  //long threaded bolt is used as axle from body
+
+ module breadboard() {
+     square([breadboard_width, breadboard_length]);
+ }
+ 
+ module L298N() {
+     square([L298N_side_length, L298N_side_length]);
+ }
  
  module raspberry_pi() {
      square([85.6, 56.5], center = true);
@@ -46,8 +64,9 @@
         import("..\\3rd_Party\\sprocket.stl", convexity = 10, center = true);
  }
 
-module sprocket() {
+module sprocket(scale_factor=2) {
    rotate([0,90,0]) {
+       scale([scale_factor,scale_factor,1])
        sprocket_base_import();
    }
 } 
@@ -84,27 +103,60 @@ module left_and_right_motor_placeholders() {
     translate([-motor_distance_from_center,0,0])
         motor_case();
 }
- 
-linear_extrude(5)
-    base(rounded=true);
 
-linear_extrude(sprocket_brace_height)
-    left_and_right_sprocket_braces();
-
-#linear_extrude(motor_height) {
+module electronic_components() {
+    #linear_extrude(motor_height) {
     translate([0,motor_y_shift,0])
         left_and_right_motor_placeholders();
 }
 
-translate([0,0,-raspberry_pi_height])
+translate([25,0,0])
     #linear_extrude(raspberry_pi_height) {
-        translate([0,-base_length/4,0])
+        translate([0,-base_length/5 ,0])
         raspberry_pi();
     }
+    
+translate([-70,0,0])
+    #linear_extrude(L298N_height) {
+        translate([0,-base_length/5 - L298N_side_length/2,0])
+        L298N();
+    }
+    
+translate([-30,40,0])
+    #linear_extrude(15) {
+        translate([0,-base_length/5 ,0])
+        breadboard();
+    }
+}
 
-//sprocket();
+module place_holder_sprockets() {
+    translate([sprocket_distance_from_center,base_length/2.5,sprocket_brace_height/2])
+    sprocket();
+    
+    mirror()
+    translate([sprocket_distance_from_center,base_length/2.5,sprocket_brace_height/2])
+    sprocket();
+    
+    translate([sprocket_distance_from_center,-base_length/2.5,sprocket_brace_height/2])
+    sprocket();
+    
+    mirror()
+    translate([sprocket_distance_from_center,-base_length/2.5,sprocket_brace_height/2])
+    sprocket();
+}
+ 
+linear_extrude(5)
+    base(rounded=true);
 
+//translate([0,0,sprocket_brace_height])
+//linear_extrude(5)
+//    base(rounded=true);
 
+linear_extrude(sprocket_brace_height)
+    left_and_right_sprocket_braces();
+
+place_holder_sprockets();
+electronic_components();
 
 
 
