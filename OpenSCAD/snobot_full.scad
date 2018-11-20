@@ -64,7 +64,7 @@
         import("..\\3rd_Party\\sprocket.stl", convexity = 10, center = true);
  }
 
-module sprocket(scale_factor=2) {
+module sprocket(scale_factor=1) {
    rotate([0,90,0]) {
        scale([scale_factor,scale_factor,1])
        sprocket_base_import();
@@ -104,63 +104,82 @@ module left_and_right_motor_placeholders() {
         motor_case();
 }
 
-module electronic_components() {
-    #linear_extrude(motor_height) {
-    translate([0,motor_y_shift,0])
-        left_and_right_motor_placeholders();
-}
+module electronic_components(no_motors=false) {
+    if(!no_motors) {
+        linear_extrude(motor_height) {
+            translate([0,motor_y_shift,0])
+                left_and_right_motor_placeholders();
+        }
+    }
 
-translate([25,0,0])
-    #linear_extrude(raspberry_pi_height) {
-        translate([0,-base_length/5 ,0])
-        raspberry_pi();
-    }
+    translate([25,0,0])
+        linear_extrude(raspberry_pi_height) {
+            translate([0,-base_length/5 ,0])
+                raspberry_pi();
+        }
     
-translate([-70,0,0])
-    #linear_extrude(L298N_height) {
-        translate([0,-base_length/5 - L298N_side_length/2,0])
-        L298N();
-    }
+    translate([-70,0,0])
+        linear_extrude(L298N_height) {
+            translate([0,-base_length/5 - L298N_side_length/2,0])
+                L298N();
+        }
     
-translate([-30,40,0])
-    #linear_extrude(15) {
-        translate([0,-base_length/5 ,0])
-        breadboard();
-    }
+    translate([-30,40,0])
+        linear_extrude(15) {
+            translate([0,-base_length/5 ,0])
+                breadboard();
+        }
 }
 
 module place_holder_sprockets() {
     translate([sprocket_distance_from_center,base_length/2.5,sprocket_brace_height/2])
-    sprocket();
+        sprocket(2);
     
     mirror()
-    translate([sprocket_distance_from_center,base_length/2.5,sprocket_brace_height/2])
-    sprocket();
+        translate([sprocket_distance_from_center,base_length/2.5,sprocket_brace_height/2])
+            sprocket(2);
     
     translate([sprocket_distance_from_center,-base_length/2.5,sprocket_brace_height/2])
-    sprocket();
+        sprocket(2);
     
     mirror()
-    translate([sprocket_distance_from_center,-base_length/2.5,sprocket_brace_height/2])
-    sprocket();
+        translate([sprocket_distance_from_center,-base_length/2.5,sprocket_brace_height/2])
+            sprocket(2);
 }
- 
-linear_extrude(5)
-    base(rounded=true);
 
-//translate([0,0,sprocket_brace_height])
-//linear_extrude(5)
-//    base(rounded=true);
+module body_version_one() {
+    linear_extrude(5)
+        base(rounded=true);
 
-linear_extrude(sprocket_brace_height)
-    left_and_right_sprocket_braces();
+    //translate([0,0,sprocket_brace_height])
+    //linear_extrude(5)
+    //    base(rounded=true);
 
-place_holder_sprockets();
-electronic_components();
+    linear_extrude(sprocket_brace_height)
+        left_and_right_sprocket_braces();
 
+    place_holder_sprockets();
+    #electronic_components();
+}
 
+// Needs above enclosure mounting points for motors
+// to form triangular tank track
+module body_version_two() {
+    difference() {
+    linear_extrude(30)
+        base(rounded=true);
+    
+    translate([0,0,-1])
+    linear_extrude(25)
+    scale([0.94,0.94,1])
+        base(rounded=false);
+    }
 
+    translate([0,-10,0])
+    #electronic_components(no_motors=true);
+}
 
+body_version_two();
 
 
 
