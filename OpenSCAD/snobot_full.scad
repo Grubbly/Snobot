@@ -9,7 +9,7 @@
  */
  
  // VISIBILITY VARIABLES
- electronics_on = false;
+ electronics_on = true;
  sprockets_on = false;
  
  // BASE VARIABLES
@@ -40,7 +40,10 @@
  L298N_side_length = 43;
  
  // BRIDGE 
- // -------
+ top_sprocket_mount_thickness = 10;
+ top_sprocket_mount_radius = 40;
+ 
+ roof_thickness = 5;
  
  // BREADBOARD PROTOTYPE
  breadboard_width = 55;
@@ -81,7 +84,7 @@
  
  module m3_base(height=100) {
     difference() {
-        linear_extrude(5) // Thickness control for roof
+        linear_extrude(roof_thickness)
             base(rounded=true);
 
         side_base_m3_bolts(height);
@@ -136,10 +139,13 @@ module sprocket(scale_factor=1) {
    }
 } 
  
- module base(rounded=true) {
+ module base(rounded=true, width=0) {
      if(rounded) {
         minkowski() {
-            square([base_width, base_length], center=true);
+            if(width > 0)
+                square([width, base_length], center=true);
+            else
+                square([base_width, base_length], center=true);
             circle(r=rounded_corner_radius,$fn=100);
         }
      } else {
@@ -212,6 +218,32 @@ module place_holder_sprockets() {
             sprocket(2);
 }
 
+module top_sprocket_mount() {
+    hull() {
+        translate([sprocket_brace_distance_from_center-0.5,0,0])
+            linear_extrude(roof_thickness)
+                base(true, width=5);
+            translate([sprocket_brace_distance_from_center+0.5*sprocket_brace_thickness+0.5*top_sprocket_mount_thickness,0,-top_sprocket_mount_radius-base_height])
+                rotate([0,-90,0])
+                    linear_extrude(top_sprocket_mount_thickness)
+                        circle(r=top_sprocket_mount_radius, center=true, $fn=1000);
+    }
+}
+
+module left_and_right_top_sprocket_mounts() {
+    difference() {
+        top_sprocket_mount();
+        side_base_m3_bolts(20);
+    }
+    
+    mirror() {
+        difference() {
+            top_sprocket_mount();
+            side_base_m3_bolts(20);
+        }
+    } 
+}
+
 module body_roof() {
     difference() {
         m3_base();
@@ -220,6 +252,8 @@ module body_roof() {
             linear_extrude(2)
                 #text("SNOBOT");
     }
+    
+    left_and_right_top_sprocket_mounts(); 
 }
 
 module body_version_one() {
@@ -243,14 +277,14 @@ module body_version_one() {
 
 // Needs above enclosure mounting points for motors
 // to form triangular tank track
-module body_version_two() {
+module body_version_two(body_roof=false) {
     additive_depth = 20;
     difference() {
         linear_extrude(sprocket_brace_height+additive_depth)
             base(rounded=true);
         
         translate([0,0,-1])
-        linear_extrude(sprocket_brace_height+additive_depth-5)
+        linear_extrude(sprocket_brace_height+additive_depth-4)
         scale([0.94,0.94,1])
             base(rounded=false);
         
@@ -265,6 +299,11 @@ module body_version_two() {
     if(sprockets_on) {
         place_holder_sprockets();
     }
+    if(body_roof) {
+        body_roof();
+    }
 }
 
-body_version_two();
+body_version_two(true);
+
+
