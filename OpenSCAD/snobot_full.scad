@@ -16,7 +16,7 @@
  
  // SPROCKET VARIABLES
  sprocket_width = 10;
- sprocket_brace_thickness = 5;
+ sprocket_brace_thickness = 4;
  sprocket_brace_distance_from_center = base_width/2 - 0.5*sprocket_brace_thickness;
  sprocket_brace_height = 25 + base_height;
  
@@ -27,7 +27,15 @@
  motor_distance_from_center = sprocket_brace_distance_from_center-sprocket_brace_thickness-0.5*motor_width-0.5*rounded_corner_radius;
  motor_y_shift = base_length/2 - motor_length/2 + rounded_corner_radius;
  
+ // RASPBERRY PI PROTOTYPE
+ raspberry_pi_height = 17;
+ 
+ 
  //long threaded bolt is used as axle from body
+ 
+ module raspberry_pi() {
+     square([85.6, 56.5], center = true);
+ }
  
  module motor_case() {
      square([motor_width,motor_length], center=true);
@@ -88,7 +96,13 @@ linear_extrude(sprocket_brace_height)
         left_and_right_motor_placeholders();
 }
 
-sprocket();
+translate([0,0,-raspberry_pi_height])
+    #linear_extrude(raspberry_pi_height) {
+        translate([0,-base_length/4,0])
+        raspberry_pi();
+    }
+
+//sprocket();
 
 
 
