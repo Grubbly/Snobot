@@ -10,12 +10,13 @@
  
  base_width = 130;
  base_length = 180;
+ rounded_base_corner_radius = 7;
  
  module base(rounded=true) {
      if(rounded) {
         minkowski() {
             square([base_width, base_length], center=true);
-            circle(r=5);
+            circle(r=rounded_base_corner_radius);
         }
      } else {
         square([base_width, base_length], center=true);
