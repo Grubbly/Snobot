@@ -10,7 +10,7 @@
  
  // VISIBILITY VARIABLES
  electronics_on = true;
- sprockets_on = false;
+ sprockets_on = true;
  
  // BASE VARIABLES
  base_width = 160;
@@ -55,10 +55,20 @@
  m3_y_shift = base_width/2 + 2*rounded_corner_radius;
  m3_side_shift = base_width/2;
  
+ // PLOW CONSTANTS
+ plow_width = 48.5; // Maybe?
+ 
+ 
  //long threaded bolt is used as axle from body
 
  module snobot_text() {
      
+ }
+ 
+ module plow() {
+     color("Blue", 1.0)
+     rotate([270,90,90])
+        import("..\\3rd_Party\\plow.stl", convexity = 10, center = true);
  }
 
  module m3_bolt(height=5) {
@@ -256,6 +266,20 @@ module body_roof() {
     left_and_right_top_sprocket_mounts(); 
 }
 
+module unsafe_plow() {
+    translate([1.5*plow_width,0.5*base_length + rounded_corner_radius+1,2*22.5])
+        scale([1.5,1.5,2])
+            plow();
+}
+
+module unsafe_plow_m3_bolt_holes() {
+    translate([1.25+(1.5*plow_width)/2,79.5,0])
+        m3_bolt(height=20);
+    mirror()
+        translate([1.25+(1.5*plow_width)/2,79.5,0])
+            m3_bolt(height=20);
+}
+
 module body_version_one() {
     linear_extrude(5)
         base(rounded=true);
@@ -277,7 +301,7 @@ module body_version_one() {
 
 // Needs above enclosure mounting points for motors
 // to form triangular tank track
-module body_version_two(body_roof=false) {
+module body_version_two(body_roof=false, plow=false) {
     additive_depth = 20;
     difference() {
         linear_extrude(sprocket_brace_height+additive_depth)
@@ -289,6 +313,7 @@ module body_version_two(body_roof=false) {
             base(rounded=false);
         
         perimeter_m3_bolts(height=20);
+        unsafe_plow_m3_bolt_holes();
     }
 
     translate([0,-10,0])
@@ -300,10 +325,20 @@ module body_version_two(body_roof=false) {
         place_holder_sprockets();
     }
     if(body_roof) {
-        body_roof();
+        difference() {
+            body_roof();
+            unsafe_plow_m3_bolt_holes();
+        }
+    }
+    if(plow) {
+        unsafe_plow();
     }
 }
 
-body_version_two(true);
+// Note: the plow could portrude outward and be attached by a fork
+// joint attached to a servo to give lifting control.
+body_version_two(body_roof=true, plow=true);
+
+
 
 
