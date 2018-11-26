@@ -44,7 +44,7 @@ while True:
     speed = int(command[1]) * 11
 
     if direction == "f":
-        print speed
+        print(speed)
         forward_pwm.ChangeDutyCycle(speed)
         time.sleep(0.5)
     else:
