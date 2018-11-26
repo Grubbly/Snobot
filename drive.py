@@ -1,5 +1,5 @@
 import RPi.GPIO as gpio
-gpio.setmode(io.BCM)
+gpio.setmode(gpio.BCM)
 
 input_pin1 = 4
 input_pin2 = 17
