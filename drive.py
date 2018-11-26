@@ -1,8 +1,8 @@
 import RPi.GPIO as gpio
 import time
 
-gpio.setmode(gpio.BOARD)
-# gpio.setmode(gpio.BCM)
+# gpio.setmode(gpio.BOARD)
+gpio.setmode(gpio.BCM)
 
 input_pin1 = 4
 input_pin2 = 17
