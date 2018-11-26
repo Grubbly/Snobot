@@ -1,8 +1,8 @@
 import RPi.GPIO as gpio
 import time
 
-# gpio.setmode(gpio.BOARD)
-gpio.setmode(gpio.BCM)
+gpio.setmode(gpio.BOARD)
+# gpio.setmode(gpio.BCM)
 
 input_pin1 = 4
 input_pin2 = 17
@@ -11,8 +11,8 @@ input_pin2 = 17
 gpio.setup(input_pin1, gpio.OUT)
 gpio.setup(input_pin2, gpio.OUT)
 
-forward_pwm = gpio.PWM(input_pin1, 100)
-forward_pwm.start(5)
+forward_pwm = gpio.PWM(input_pin1, 50)
+forward_pwm.start(0)
 time.sleep(1)
 
 # def set_pwm(property, value):
@@ -45,8 +45,9 @@ while True:
 
     if direction == "f":
         print(speed)
-        forward_pwm.ChangeDutyCycle(speed)
-        time.sleep(0.5)
+        # forward_pwm.ChangeDutyCycle(speed)
+        forward_pwm.start(50)
+        time.sleep(1.5)
     else:
         backward()
 
