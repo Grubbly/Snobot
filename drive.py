@@ -39,7 +39,7 @@ time.sleep(1)
 # forward()
 #
 while True:
-    command = raw_input("Enter f/r (forward/backward) followed by a number 0-9 (speed) to drive. E.g. f5 :")
+    command = input("Enter f/r (forward/backward) followed by a number 0-9 (speed) to drive. E.g. f5 :")
     direction = command[0]
     speed = int(command[1]) * 11
 
