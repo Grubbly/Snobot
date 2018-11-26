@@ -2,12 +2,14 @@ import RPi.GPIO as gpio
 import time
 
 # gpio.setmode(gpio.BOARD)
-gpio.setmode(gpio.BCM)
+gpio.setmode(gpio.BOARD)
 
-input_pin1 = 4
-input_pin2 = 17
+enable = 12
+input_pin1 = 7
+input_pin2 = 11
 # pwm_path = "/sys/class/rpi-pwm/pwm0/"
 
+gpio.setup(enable, gpio.OUT)
 gpio.setup(input_pin1, gpio.OUT)
 gpio.setup(input_pin2, gpio.OUT)
 
@@ -44,9 +46,10 @@ while True:
     speed = int(command[1]) * 11
 
     if direction == "f":
+        gpio.output(enable, gpio.HIGH)
         print(speed)
-        # forward_pwm.ChangeDutyCycle(speed)
-        forward_pwm.start(50)
+        forward_pwm.ChangeDutyCycle(speed)
+        # forward_pwm.start(50)
         time.sleep(1.5)
     else:
         backward()
