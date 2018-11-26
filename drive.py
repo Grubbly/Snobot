@@ -13,34 +13,46 @@ gpio.setup(input_pin2, gpio.OUT)
 gpio.output(enable, gpio.HIGH)
 forward_pwm = gpio.PWM(input_pin1, 50)
 forward_pwm.start(0)
-backward_pwm = gpio.PWM(input_pin2, 50)
+backward_pwm = gpio.PWM(input_pin2, 100)
 backward_pwm.start(0)
 
 power_toggle = True
 
-def forward():
-    print("Forward " + speed)
+def forward(speed):
+    print("Forward " + str(speed))
     forward_pwm.ChangeDutyCycle(speed)
+    backward_pwm.ChangeDutyCycle(0)
+    time.sleep(0.015)
 
-def backward():
-    print("backward " + speed)
+def backward(speed):
+    print("backward " + str(speed))
+    forward_pwm.ChangeDutyCycle(0)
     backward_pwm.ChangeDutyCycle(speed)
+    time.sleep(0.015)
 
+# Wrap in try catch
 while True:
     command = input("Enter f/r (forward/backward) followed by a number 0-9 (speed) to drive. E.g. f5 :")
     direction = command[0]
-    speed = int(command[1]) * 11
+    if len(command) == 2:
+        print("speed set")
+        speed = int(command[1]) * 11
+    else:
+        print("Invalid command length for speed, speed not set")
 
     if direction == "f":
-        forward()    
-    else if direction == "q":
+        forward(speed)
+    elif direction == "q":
         gpio.output(enable, gpio.LOW)
         gpio.cleanup()
-    else if direction == " ":
-        power_toggle = !power_toggle
+        print("BYE")
+        break
+    elif direction == " ":
+        power_toggle = not power_toggle
+        if(power_toggle):
+            print("Motor on")
+        else:
+            print("Motor off")
         gpio.output(enable, power_toggle)
     else:
-        backward()
-
-    if speed in range(0,10):
-        set_pwm("duty", str(speed))
+        backward(speed)
