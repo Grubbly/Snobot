@@ -13,7 +13,7 @@ def hello_world():
 @app.route('/forward/<speed>')
 def drive_forward():
     snobot_drive.forward(speed)
-    return 'Driving forward at ' + speed + '%'
+    return 'Driving forward at %d' % speed
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
