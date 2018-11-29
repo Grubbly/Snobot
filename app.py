@@ -11,7 +11,7 @@ def hello_world():
     return 'Hello, World!'
 
 @app.route('/forward/<int:speed>')
-def drive_forward():
+def drive_forward(speed):
     snobot_drive.forward(speed)
     return 'Driving forward at %d' % speed
 
