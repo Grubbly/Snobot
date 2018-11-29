@@ -1,5 +1,5 @@
 import sumNums
-from drive import forward, backward
+import snobot_drive
 from flask import Flask, request
 from flask_restful import Resource, Api
 
@@ -11,8 +11,9 @@ class sumNumbers(Resource):
         return {'data': sumNums.sumNums(first,second)}
 
 class driveForward(Resource):
-    def get(self, speed):
-        return {'Motor Data': forward(speed)}
+   def get(self, speed):
+       {snobot_drive.forward(speed)}
+       return {'Motor Data': 5}
 
 api.add_resource(sumNumbers, '/sumNums/<first>/<second>')
 api.add_resource(driveForward, '/forward/<speed>')
