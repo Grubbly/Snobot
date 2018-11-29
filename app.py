@@ -8,6 +8,7 @@ api = Api(app)
 
 @app.route('/')
 def hello_world():
+    snobot_drive.forward(50)
     return 'Hello, World!'
 
 # class sumNumbers(Resource):
