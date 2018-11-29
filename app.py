@@ -10,7 +10,7 @@ api = Api(app)
 def hello_world():
     return 'Hello, World!'
 
-@app.route('/forward/<speed>')
+@app.route('/forward/<int:speed>')
 def drive_forward():
     snobot_drive.forward(speed)
     return 'Driving forward at %d' % speed
