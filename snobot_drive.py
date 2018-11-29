@@ -29,3 +29,12 @@ def backward(speed):
     forward_pwm.ChangeDutyCycle(0)
     backward_pwm.ChangeDutyCycle(speed)
     time.sleep(0.015)
+
+def toggle_motor():
+    power_toggle = not power_toggle
+    gpio.output(enable, power_toggle)
+    return str(power_toggle)
+
+def quit():
+    gpio.output(enable, gpio.LOW)
+    gpio.cleanup()

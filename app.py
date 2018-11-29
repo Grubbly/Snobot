@@ -20,5 +20,15 @@ def drive_backward(speed):
     snobot_drive.backward(speed)
     return 'Driving backward at %d' % speed
 
+@app.route('/quit')
+def clean_quit():
+    snobot_drive.quit()
+    return 'GPIO Cleaned, robot off'
+
+@app.route('/toggleMotor')
+def toggle_motor():
+    motor_state = snobot_drive.toggle_motor()
+    return 'Motor %s' % motor_state 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
