@@ -13,7 +13,7 @@ class sumNumbers(Resource):
 class driveForward(Resource):
    def get(self, speed):
        snobot_drive.forward(speed)
-       return {'Motor Data': 5}
+       return {'Motor Data': "5"}
 
 api.add_resource(sumNumbers, '/sumNums/<first>/<second>')
 api.add_resource(driveForward, '/forward/<speed>')
