@@ -15,5 +15,10 @@ def drive_forward(speed):
     snobot_drive.forward(speed)
     return 'Driving forward at %d' % speed
 
+@app.route('/backward/<int:speed>')
+def drive_backward(speed):
+    snobot_drive.backward(speed)
+    return 'Driving backward at %d' % speed
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
