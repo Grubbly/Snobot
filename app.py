@@ -22,5 +22,5 @@ def hello_world():
 # api.add_resource(sumNumbers, '/sumNums/<first>/<second>')
 # api.add_resource(driveForward, '/forward/<speed>')
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0')
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
