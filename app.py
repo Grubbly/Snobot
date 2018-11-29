@@ -7,7 +7,7 @@ api = Api(app)
 
 class sumNumbers(Resource):
     def get(self, first, second):
-        return {'data': sumNums.sumNums.(first,second)}
+        return {'data': sumNums.sumNums(first,second)}
 
 api.add_resource(sumNumbers, '/sumNums/<first>/<second>')
 
