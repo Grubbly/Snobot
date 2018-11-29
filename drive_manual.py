@@ -1,6 +1,13 @@
 import RPi.GPIO as gpio
 import time
 
+try {
+    gpio.cleanup()
+    print("GPIO Cleaned")
+} except {
+    print("GPIO Started Clean")
+}
+
 gpio.setmode(gpio.BOARD)
 enable = 12
 input_pin1 = 7
