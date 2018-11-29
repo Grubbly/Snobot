@@ -12,4 +12,4 @@ class sumNumbers(Resource):
 api.add_resource(sumNumbers, '/sumNums/<first>/<second>')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
