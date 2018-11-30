@@ -9,7 +9,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 /***  RASPBERRY PI RUNNING FLASK BACKEND IP ***/
-const url = 'http://192.168.1.143:5000';
+const url_raw = 'http://192.168.1.143';
+const url = url_raw + ':5000';
 
 export class DriveControl extends Component {
     constructor(props) {
@@ -92,28 +93,43 @@ export class DriveControl extends Component {
                 onKeyDown={this.onKeyPressed}
                 tabIndex="0"
             >
-                <span>
-                    <button onClick={this.drive_forward}>
-                        Forward
-                    </button>
-                    <button onClick={this.drive_backward}>
-                        Backward
-                    </button>
-                    <button onClick={this.spin_left}>
-                        Spin Left
-                    </button>
-                    <button onClick={this.spin_right}>
-                        Spin Right
-                    </button>
-                </span>
+                <article>
+                    <iframe src={url_raw + ":8080/?action=stream"} title="NoIR Camera View" width="700" height="1000" scrolling="no" style={{border: "none"}}>
+                        <p> Uh oh, browser does not support iframes.</p>
+                    </iframe>
+                </article>
 
-                <form onSubmit={this.handleSubmit}>
-                    <label> 
-                        <br />
-                        Speed <br /> 
-                        <input type="text" onChange={this.handleChange} value={this.state.speed} />
-                    </label>
-                </form>      
+                <article style={{position: "absolute", 
+                                // background: "seagreen", 
+                                top: "700px",
+                                right: "0%",
+                                width: "100%",
+                                height: "100%"
+                                }}>
+                    <span>
+                        <button onClick={this.drive_forward}>
+                            Forward
+                        </button>
+                        <button onClick={this.drive_backward}>
+                            Backward
+                        </button>
+                        <button onClick={this.spin_left}>
+                            Spin Left
+                        </button>
+                        <button onClick={this.spin_right}>
+                            Spin Right
+                        </button>
+                    </span>
+
+                    <form onSubmit={this.handleSubmit}>
+                        <label> 
+                            <br />
+                            Speed <br /> 
+                            <input type="text" onChange={this.handleChange} value={this.state.speed} />
+                        </label>
+                    </form>      
+                </article>
+                
             </div>
         );
     }
