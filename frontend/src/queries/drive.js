@@ -5,8 +5,8 @@
 //
 // Frontend interface to backend drive endpoints
 
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
 
 export class DriveControl extends Component {
     constructor(props) {
@@ -20,11 +20,14 @@ export class DriveControl extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.drive_forward = this.drive_forward.bind(this);
         this.drive_backward = this.drive_backward.bind(this);
+        this.onKeyPressed = this.onKeyPressed.bind(this);
     }
 
     handleChange(event) {
-        this.setState({speed: event.target.value});
-        console.log('Speed set to ' + this.state.speed);
+        if(event.target.value >= 0 && event.target.value <= 100) {
+            this.setState({speed: event.target.value});
+            // console.log('Speed set to ' + this.state.speed);
+        }
     }
 
     handleSubmit(event) {
@@ -37,13 +40,28 @@ export class DriveControl extends Component {
     }
 
     drive_backward() {
-        axios.get('http://192.168.1.143:5000/backward'.concat(this.state.speed))
+        axios.get('http://192.168.1.143:5000/backward/' + this.state.speed)
             .then(console.log('Drive backward succeeded on: http://192.168.1.143:5000/backward'));
+    }
+
+    onKeyPressed(e) {
+        if(e.keyCode === 87) {
+            this.drive_forward();
+        }
+        if(e.keyCode === 83) {
+            this.drive_backward();
+        }
+        console.log(e.keyCode);
     }
 
     render() {
         return (
-            <div>
+            <div 
+                className="control"
+                style={{color: "coral"}}
+                onKeyDown={this.onKeyPressed}
+                tabIndex="0"
+            >
                 <span>
                     <button onClick={this.drive_forward}>
                         Forward
@@ -55,12 +73,11 @@ export class DriveControl extends Component {
 
                 <form onSubmit={this.handleSubmit}>
                     <label> 
-                        Speed:
+                        <br />
+                        Speed <br /> 
                         <input type="text" onChange={this.handleChange} value={this.state.speed} />
                     </label>
-                    {/* <input type="submit" value="Submit" /> */}
-                </form>
-                
+                </form>      
             </div>
         );
     }
