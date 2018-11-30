@@ -337,7 +337,7 @@ module body_version_two(body_roof=false, plow=false) {
 
 // Note: the plow could portrude outward and be attached by a fork
 // joint attached to a servo to give lifting control.
-body_version_two(body_roof=true, plow=true);
+body_version_two(body_roof=false, plow=true);
 
 
 
