@@ -46,6 +46,14 @@ def motor2_backward(speed):
     m2_backward_pwm.ChangeDutyCycle(speed)
     time.sleep(0.015)
 
+def spin_left(speed):
+    motor2_forward(speed)
+    motor1_backward(speed)
+
+def spin_right(speed):
+    motor2_backward(speed)
+    motor1_forward(speed)
+
 # WHIP
 def toggle_motor():
     power_toggle = not power_toggle

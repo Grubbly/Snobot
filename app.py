@@ -22,6 +22,16 @@ def drive_backward(speed):
     snobot_drive.motor2_backward(speed)
     return 'Driving backward at %d' % speed
 
+@app.route('/spinLeft/<int:speed>')
+def spin_left(speed):
+    snobot_drive.spin_left(speed)
+    return 'Spinning left at %d' % speed
+
+@app.route('/spinRight/<int:speed>')
+def spin_right(speed):
+    snobot_drive.spin_right(speed)
+    return 'Spinning right at %d' % speed
+
 @app.route('/quit')
 def clean_quit():
     snobot_drive.quit()

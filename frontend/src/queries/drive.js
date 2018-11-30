@@ -8,6 +8,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+/***  RASPBERRY PI RUNNING FLASK BACKEND IP ***/
+const url = 'http://192.168.1.143:5000';
+
 export class DriveControl extends Component {
     constructor(props) {
         super(props)
@@ -20,6 +23,8 @@ export class DriveControl extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.drive_forward = this.drive_forward.bind(this);
         this.drive_backward = this.drive_backward.bind(this);
+        this.spin_left = this.spin_left(this);
+        this.spin_right = this.spin_right(this);
         this.onKeyPressed = this.onKeyPressed.bind(this);
     }
 
@@ -35,23 +40,47 @@ export class DriveControl extends Component {
     }
 
     drive_forward() {
-        axios.get('http://192.168.1.143:5000/forward/' + this.state.speed)
-            .then(console.log('Drive forward succeeded on: http://192.168.1.143:5000/forward/'));
+        const endpoint = url + '/forward/' + this.state.speed;
+        axios.get(endpoint)
+            .then(console.log('Drive forward succeeded on: ' + endpoint));
     }
 
     drive_backward() {
-        axios.get('http://192.168.1.143:5000/backward/' + this.state.speed)
-            .then(console.log('Drive backward succeeded on: http://192.168.1.143:5000/backward'));
+        const endpoint = url + '/backward/' + this.state.speed;
+        axios.get(endpoint)
+            .then(console.log('Drive backward succeeded on: ' + endpoint));
+    }
+
+    spin_left() {
+        const endpoint = url + '/spinLeft/' + this.state.speed;
+        axios.get(endpoint)
+            .then(console.log('Drive forward succeeded on: ' + endpoint));
+    }
+
+    spin_right() {
+        const endpoint = url + '/spinRight/' + this.state.speed;        
+        axios.get(endpoint)
+            .then(console.log('Drive forward succeeded on: ' + endpoint));
     }
 
     onKeyPressed(e) {
-        if(e.keyCode === 87) {
+        const W = 87;
+        const A = 65;
+        const S = 83;
+        const D = 68;
+
+        if(e.keyCode === W) {
             this.drive_forward();
         }
-        if(e.keyCode === 83) {
+        if(e.keyCode === A) {
+            this.spin_left();
+        }
+        if(e.keyCode === S) {
             this.drive_backward();
         }
-        console.log(e.keyCode);
+        if(e.keyCode === D) {
+            this.spin_right();
+        }
     }
 
     render() {
