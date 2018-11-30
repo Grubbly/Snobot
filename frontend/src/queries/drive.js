@@ -23,8 +23,8 @@ export class DriveControl extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.drive_forward = this.drive_forward.bind(this);
         this.drive_backward = this.drive_backward.bind(this);
-        this.spin_left = this.spin_left(this);
-        this.spin_right = this.spin_right(this);
+        this.spin_left = this.spin_left.bind(this);
+        this.spin_right = this.spin_right.bind(this);
         this.onKeyPressed = this.onKeyPressed.bind(this);
     }
 
@@ -39,6 +39,19 @@ export class DriveControl extends Component {
         event.preventDefault();
     }
 
+    spin_left() {
+        console.log("Inside spin left");
+        const endpoint = url + '/spinLeft/' + this.state.speed;
+        axios.get(endpoint)
+            .then(console.log('Drive forward succeeded on: ' + endpoint));
+    }
+
+    spin_right() {
+        const endpoint = url + '/spinRight/' + this.state.speed;        
+        axios.get(endpoint)
+            .then(console.log('Drive forward succeeded on: ' + endpoint));
+    }
+
     drive_forward() {
         const endpoint = url + '/forward/' + this.state.speed;
         axios.get(endpoint)
@@ -49,18 +62,6 @@ export class DriveControl extends Component {
         const endpoint = url + '/backward/' + this.state.speed;
         axios.get(endpoint)
             .then(console.log('Drive backward succeeded on: ' + endpoint));
-    }
-
-    spin_left() {
-        const endpoint = url + '/spinLeft/' + this.state.speed;
-        axios.get(endpoint)
-            .then(console.log('Drive forward succeeded on: ' + endpoint));
-    }
-
-    spin_right() {
-        const endpoint = url + '/spinRight/' + this.state.speed;        
-        axios.get(endpoint)
-            .then(console.log('Drive forward succeeded on: ' + endpoint));
     }
 
     onKeyPressed(e) {
@@ -97,6 +98,12 @@ export class DriveControl extends Component {
                     </button>
                     <button onClick={this.drive_backward}>
                         Backward
+                    </button>
+                    <button onClick={this.spin_left}>
+                        Spin Left
+                    </button>
+                    <button onClick={this.spin_right}>
+                        Spin Right
                     </button>
                 </span>
 
