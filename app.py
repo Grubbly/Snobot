@@ -12,12 +12,14 @@ def hello_world():
 
 @app.route('/forward/<int:speed>')
 def drive_forward(speed):
-    snobot_drive.forward(speed)
+    snobot_drive.motor1_forward(speed)
+    snobot_drive.motor2_forward(speed)
     return 'Driving forward at %d' % speed
 
 @app.route('/backward/<int:speed>')
 def drive_backward(speed):
-    snobot_drive.backward(speed)
+    snobot_drive.motor1_backward(speed)
+    snobot_drive.motor2_backward(speed)
     return 'Driving backward at %d' % speed
 
 @app.route('/quit')
