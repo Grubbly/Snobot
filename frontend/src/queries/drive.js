@@ -70,6 +70,8 @@ export class DriveControl extends Component {
         const A = 65;
         const S = 83;
         const D = 68;
+        const SPACE = 32;
+        const Q = 81;
 
         if(e.keyCode === W) {
             this.drive_forward();
@@ -82,6 +84,13 @@ export class DriveControl extends Component {
         }
         if(e.keyCode === D) {
             this.spin_right();
+        }
+        if(e.keyCode >= 96 && e.keyCode <= 105) {
+            this.setState({speed: (e.keyCode-96)*11});
+        }
+        if(e.keyCode === SPACE || e.keyCode === Q) {
+            this.setState({speed: 0});
+            this.drive_forward();
         }
     }
 
