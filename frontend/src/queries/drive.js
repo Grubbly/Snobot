@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 /***  RASPBERRY PI RUNNING FLASK BACKEND IP ***/
-const url_raw = 'http://192.168.1.143';
+const url_raw = 'http://192.168.137.205';
 const url = url_raw + ':5000';
 
 export class DriveControl extends Component {
