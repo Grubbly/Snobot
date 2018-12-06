@@ -27,7 +27,7 @@ export class DriveControl extends Component {
         this.spin_left = this.spin_left.bind(this);
         this.spin_right = this.spin_right.bind(this);
         this.onKeyPressed = this.onKeyPressed.bind(this);
-        this.stop - this.stop.bind(this);
+        this.stop = this.stop.bind(this);
     }
 
     handleChange(event) {
