@@ -27,6 +27,7 @@ export class DriveControl extends Component {
         this.spin_left = this.spin_left.bind(this);
         this.spin_right = this.spin_right.bind(this);
         this.onKeyPressed = this.onKeyPressed.bind(this);
+        this.stop - this.stop.bind(this);
     }
 
     handleChange(event) {
@@ -65,6 +66,13 @@ export class DriveControl extends Component {
             .then(console.log('Drive backward succeeded on: ' + endpoint));
     }
 
+    stop() {
+        const endpoint = url + '/forward/0';
+        axios.get(endpoint)
+            .then(console.log('Stop succeeded on: ' + endpoint));
+        this.setState({speed: 0});
+    }
+
     onKeyPressed(e) {
         const W = 87;
         const A = 65;
@@ -89,8 +97,7 @@ export class DriveControl extends Component {
             this.setState({speed: (e.keyCode-96)*11});
         }
         if(e.keyCode === SPACE || e.keyCode === Q) {
-            this.setState({speed: 0});
-            this.drive_forward();
+            this.stop();
         }
     }
 
