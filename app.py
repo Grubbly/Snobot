@@ -47,5 +47,10 @@ def turn(position):
     snobot_drive.turnTopServoCamera(position)
     return 'Top Servo Camera moved to: %d' % position
 
+@app.route('/turnBottomServoCamera/<int:position>')
+def turn_base(position):
+    snobot_drive.turnBottomServoCamera(position)
+    return 'Bottom Servo Camera moved to: %d' % position
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

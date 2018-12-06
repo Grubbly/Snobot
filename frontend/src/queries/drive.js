@@ -18,6 +18,8 @@ export class DriveControl extends Component {
 
         this.state = {
             speed: '0',
+            top_position: '1',
+            bottom_position: '1',
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -33,6 +35,13 @@ export class DriveControl extends Component {
     handleChange(event) {
         if(event.target.value >= 0 && event.target.value <= 100) {
             this.setState({speed: event.target.value});
+            // console.log('Speed set to ' + this.state.speed);
+        }
+    }
+
+    handleTopServo(event) {
+        if(event.target.value >= 0 && event.target.value <= 100) {
+            this.setState({top_position: event.target.value});
             // console.log('Speed set to ' + this.state.speed);
         }
     }
@@ -66,6 +75,12 @@ export class DriveControl extends Component {
             .then(console.log('Drive backward succeeded on: ' + endpoint));
     }
 
+    turn_top_camera_servo(position) {
+        const endpoint = url + '/turnTopServoCamera/' + position;
+        axios.get(endpoint)
+            .then(console.log('Turn top camera servo succeeded on: ' + endpoint));
+    }
+
     stop() {
         const endpoint = url + '/forward/0';
         axios.get(endpoint)
@@ -80,6 +95,11 @@ export class DriveControl extends Component {
         const D = 68;
         const SPACE = 32;
         const Q = 81;
+        const LEFT = 37;
+        const RIGHT = 39;
+        const UP = 38;
+        const DOWN = 40;
+        const SHIFT = 16;
 
         if(e.keyCode === W) {
             this.drive_forward();
@@ -95,6 +115,38 @@ export class DriveControl extends Component {
         }
         if(e.keyCode >= 96 && e.keyCode <= 105) {
             this.setState({speed: (e.keyCode-96)*11});
+        }
+        if(e.keyCode === RIGHT) {
+            let position = parseInt(this.state.top_position);
+            if(this.state.top_position < 98 && this.state.top_position > 0) {
+                position += 2;
+            }
+            this.turn_top_camera_servo(position);
+            this.setState({top_position: position});
+        }
+        if(e.keyCode === LEFT) {
+            let position = parseInt(this.state.top_position);
+            if(this.state.top_position < 100 && this.state.top_position > 2) {
+                position -= 2;
+            }
+            this.turn_top_camera_servo(position);
+            this.setState({top_position: position});
+        }
+        if(e.keyCode === UP) {
+            let position = parseInt(this.state.bottom_position);
+            if(this.state.bottom_position < 98 && this.state.bottom_position > 0) {
+                position += 2;
+            }
+            this.turn_bottom_camera_servo(position);
+            this.setState({bottom_position: position});
+        }
+        if(e.keyCode === DOWN) {
+            let position = parseInt(this.state.bottom_position);
+            if(this.state.bottom_position < 100 && this.state.bottom_position > 2) {
+                position -= 2;
+            }
+            this.turn_bottom_camera_servo(position);
+            this.setState({bottom_position: position});
         }
         if(e.keyCode === SPACE || e.keyCode === Q) {
             this.stop();
@@ -142,6 +194,9 @@ export class DriveControl extends Component {
                             <br />
                             Speed <br /> 
                             <input type="text" onChange={this.handleChange} value={this.state.speed} />
+                            <br />
+                            Top Servo <br /> 
+                            <input type="text" onChange={this.handleTopServo} value={this.state.top_position} />
                         </label>
                     </form>      
                 </article>
