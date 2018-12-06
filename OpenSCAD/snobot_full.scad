@@ -67,7 +67,7 @@
  
  module plow() {
      color("Blue", 1.0)
-     rotate([270,90,90])
+     rotate([0,0,0])
         import("..\\3rd_Party\\plow.stl", convexity = 10, center = true);
  }
 
@@ -267,9 +267,19 @@ module body_roof() {
 }
 
 module unsafe_plow() {
-    translate([1.5*plow_width,0.5*base_length + rounded_corner_radius+1,2*22.5])
-        scale([1.5,1.5,2])
-            plow();
+    difference() {
+        translate([-1.5*plow_width,0.5*base_length + rounded_corner_radius+1,-2*13.5])
+            scale([1.5,1.5,2])
+                plow();
+        rotate([90,0,0]) {
+            translate([29,10,-70]) {
+                m3_bolt(height=100);
+            }
+            translate([-59,10,-70]) {
+                m3_bolt(height=100);
+            }
+        }
+    }
 }
 
 module unsafe_plow_m3_bolt_holes() {
@@ -337,8 +347,8 @@ module body_version_two(body_roof=false, plow=false) {
 
 // Note: the plow could portrude outward and be attached by a fork
 // joint attached to a servo to give lifting control.
-body_version_two(body_roof=false, plow=true);
+//body_version_two(body_roof=false, plow=true);
 
-
+unsafe_plow();
 
 
