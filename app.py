@@ -42,7 +42,7 @@ def toggle_motor():
     motor_state = snobot_drive.toggle_motor()
     return 'Motor %s' % motor_state 
 
-@app.route('/turnTopServoCamera/<int:position')
+@app.route('/turnTopServoCamera/<int:position>')
 def turn(position):
     snobot_drive.turnTopServoCamera(position)
     return 'Top Servo Camera moved to: %d' % position
