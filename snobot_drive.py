@@ -7,12 +7,14 @@ m1_input_pin1 = 7
 m1_input_pin2 = 11
 m2_input_pin1 = 29
 m2_input_pin2 = 31
+top_servo_pin = 15
 
 gpio.setup(enable, gpio.OUT)
 gpio.setup(m1_input_pin1, gpio.OUT)
 gpio.setup(m1_input_pin2, gpio.OUT)
 gpio.setup(m2_input_pin1, gpio.OUT)
 gpio.setup(m2_input_pin2, gpio.OUT)
+gpio.setup(top_servo_pin, gpio.OUT)
 
 gpio.output(enable, gpio.HIGH)
 m1_forward_pwm = gpio.PWM(m1_input_pin1, 50)
@@ -23,6 +25,8 @@ m2_forward_pwm = gpio.PWM(m2_input_pin1, 52)
 m2_forward_pwm.start(0)
 m2_backward_pwm = gpio.PWM(m2_input_pin2, 53)
 m2_backward_pwm.start(0)
+top_camera_servo = gpio.PWM(top_servo_pin, 54)
+top_camera_servo.start(7.5)
 
 power_toggle = True
 
@@ -53,6 +57,10 @@ def spin_left(speed):
 def spin_right(speed):
     motor2_backward(speed)
     motor1_forward(speed)
+
+def turnTopServoCamera(position):
+    top_camera_servo.ChangeDutyCycle(position)
+    time.sleep(0.015)
 
 # WHIP
 def toggle_motor():
