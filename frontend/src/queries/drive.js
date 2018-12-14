@@ -30,6 +30,7 @@ export class DriveControl extends Component {
         this.spin_right = this.spin_right.bind(this);
         this.onKeyPressed = this.onKeyPressed.bind(this);
         this.stop = this.stop.bind(this);
+        this.handleTopServo = this.handleTopServo.bind(this);
     }
 
     handleChange(event) {
@@ -79,6 +80,12 @@ export class DriveControl extends Component {
         const endpoint = url + '/turnTopServoCamera/' + position;
         axios.get(endpoint)
             .then(console.log('Turn top camera servo succeeded on: ' + endpoint));
+    }
+
+    turn_bottom_camera_servo(position) {
+        const endpoint = url + '/turnBottomServoCamera/' + position;
+        axios.get(endpoint)
+            .then(console.log('Turn bottom camera servo succeeded on: ' + endpoint));
     }
 
     stop() {
@@ -195,8 +202,8 @@ export class DriveControl extends Component {
                             Speed <br /> 
                             <input type="text" onChange={this.handleChange} value={this.state.speed} />
                             <br />
-                            Top Servo <br /> 
-                            <input type="text" onChange={this.handleTopServo} value={this.state.top_position} />
+                            {/* Top Servo <br /> 
+                            <input type="text" onChange={this.handleTopServo} value={this.state.top_position} /> */}
                         </label>
                     </form>      
                 </article>
