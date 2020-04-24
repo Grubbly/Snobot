@@ -1,5 +1,7 @@
 # Snobot
 What is my purpose? You remove snow.
 
+[Presentation Slides](https://docs.google.com/presentation/d/1IGTnbGOy6tZHiFMEPDpysXzX09d58qGgY1V4JeaUiBU/edit?usp=sharing)
+
 ## Credits
 * https://github.com/jacksonliam/mjpg-streamer
